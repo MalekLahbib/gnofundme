@@ -90,6 +90,19 @@ func AddContributor(campaignId string, amount uint, display bool) string {
 	return "contributor added successfully"
 }
 
+func GetCampaigns() string {
+	if campaigns.Size() == 0 {
+		return "[]"
+	}
+	campaignsArray := make([]*pkg.Campaign, 0, campaigns.Size())
+	campaigns.Iterate("", "", func(key string, value interface{}) bool {
+		c := value.(*pkg.Campaign)
+		campaignsArray = append(campaignsArray, c)
+		return false
+	})
+	return pkg.CampaignsToJSONString(campaignsArray)
+}
+
 func Render(path string) string {
 	if path == "" {
 		return renderHomePage()

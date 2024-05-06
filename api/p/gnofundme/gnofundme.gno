@@ -3,6 +3,7 @@ package gnofundme
 import (
 	"std"
 	"strconv"
+	"strings"
 	"time"
 
 	"gno.land/p/demo/avl"
@@ -105,12 +106,12 @@ func CampaignToJSONString(campaign *Campaign) string {
 	sb.WriteString("{")
 	sb.WriteString(`"title":"` + campaign.title + `",`)
 	sb.WriteString(`"description":"` + escapeString(campaign.description) + `",`)
-	sb.WriteString(`"goal":` + strconv.Itoa(campaign.goal))
-	sb.WriteString(`"current":` + strconv.Itoa(campaign.current))
+	sb.WriteString(`"goal":"` + strconv.Itoa(int(campaign.goal)) + `",`)
+	sb.WriteString(`"current":"` + strconv.Itoa(int(campaign.current)) + `",`)
 	sb.WriteString(`"begin":"` + strconv.Itoa(int(campaign.begin.Unix())) + `",`)
-	sb.WriteString(`"owner":"` + campaign.owner.GetAdress() + `",`)
-	sb.WriteString(`"beneficiary":"` + campaign.beneficiary.GetAdress() + `",`)
-	sb.WriteString(`"contributors":` + strconv.Itoa(campaign.len(contributors)))
+	sb.WriteString(`"owner":"` + campaign.owner.GetAddress().String() + `",`)
+	sb.WriteString(`"beneficiary":"` + campaign.beneficiary.GetAddress().String() + `",`)
+	sb.WriteString(`"contributors":"` + strconv.Itoa(len(campaign.contributors)) + `"`)
 	sb.WriteString("}")
 
 	return sb.String()

@@ -11,6 +11,6 @@ export const parseCampaignFetchResponse = (response: string): ICampaign[] => {
   }
 
   const cleanResponse: string = match[1].replace(/\\"/g, '"');
-
+  
   return JSON.parse(cleanResponse);
 };

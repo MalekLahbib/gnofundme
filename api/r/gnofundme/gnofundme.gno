@@ -35,9 +35,18 @@ func NewUser(name string, email string) string {
 	return user.GetName() + " added successfully"
 }
 
-func NewCampaign(title string, description string, goal uint, beginT int64, deadlineT int64, beneficiary string) (int, string) {
+func NewCampaign(title string, description string, goal uint, beginT int64, deadlineT int64, beneficiary std.Address) (int, string) {
 	// get the caller as the owner address
 	caller := std.GetOrigCaller()
+	user := pkg.NewUser("user1", "email1", caller)
+
+	// the avl.tree key will be address to simplify the fetching
+	users.Set(caller.String(), user)
+
+	user = pkg.NewUser("user2", "email2", beneficiary)
+
+	// the avl.tree key will be address to simplify the fetching
+	users.Set(beneficiary.String(), user)
 	// verify that the user exists
 	o, ok := users.Get(caller.String())
 	if !ok {
@@ -45,7 +54,7 @@ func NewCampaign(title string, description string, goal uint, beginT int64, dead
 	}
 
 	// verify that the benefeciary exists
-	b, ok := users.Get(beneficiary)
+	b, ok := users.Get(beneficiary.String())
 	if !ok {
 		panic("beneficiary not found")
 	}
@@ -68,7 +77,7 @@ func NewCampaign(title string, description string, goal uint, beginT int64, dead
 	return key, "campaign created successfully"
 }
 
-func AddContributor(campaignId string, amount uint, display bool) string {
+func AddContributor(campaignId string, display bool) string {
 	// get the campaign if it exists
 	campaign, ok := campaigns.Get(campaignId)
 	if !ok {
@@ -83,6 +92,9 @@ func AddContributor(campaignId string, amount uint, display bool) string {
 	if !ok {
 		panic("user is not registered")
 	}
+
+	sentCoins := std.GetOrigSend()
+	amount := sentCoins.AmountOf("ugnot")
 
 	// add the contributor to the campaign
 	campaign.(*pkg.Campaign).AddContributor(user.(*pkg.User), amount, display)
@@ -118,11 +130,17 @@ func Render(path string) string {
 }
 
 func renderHomePage() string {
+	banker := std.GetBanker(std.BankerTypeRealmIssue)
+	banker.IssueCoin(std.CurrentRealm().Addr(), "ugnot", 350000000)
+	balance := banker.GetCoins(std.CurrentRealm().Addr())
 	// define empty buffer
 	var b bytes.Buffer
+
 	// users counter
 	userc := 1
 	b.WriteString("# Welcome to GnoFundMe\n\n")
+	b.WriteString(ufmt.Sprintf("Balance: %s.\n", balance.String()))
+
 	b.WriteString("# Campaigns :\n\n")
 	campaigns.Iterate("", "", func(key string, value interface{}) bool {
 		c := value.(*pkg.Campaign)

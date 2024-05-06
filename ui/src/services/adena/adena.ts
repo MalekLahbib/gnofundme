@@ -98,7 +98,7 @@ export class AdenaService {
       gasFee: 1000000, // 1 gnot
       gasWanted: gasWanted // ugnot
     });
-
+    
     // Check the response
     if (response.status !== EAdenaResponseStatus.SUCCESS) {
       throw new Error(`unable to send transaction: ${response.message}`);

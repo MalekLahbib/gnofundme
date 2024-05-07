@@ -8,14 +8,14 @@ import (
 	"time"
 
 	"gno.land/p/demo/avl"
-	pkg "gno.land/p/demo/gnofundme"
 	"gno.land/p/demo/ufmt"
+	pkg "gno.land/p/malek/gnofundme"
 )
 
 var (
 	campaigns      *avl.Tree
 	users          *avl.Tree
-	campaignPrefix = "/r/demo/gnofundme:"
+	campaignPrefix = "/r/malek/gnofundme:"
 )
 
 func init() {
@@ -77,7 +77,7 @@ func NewCampaign(title string, description string, goal uint, beginT int64, dead
 	return key, "campaign created successfully"
 }
 
-func AddContributor(campaignId string, display bool) string {
+func AddContributor(campaignId string, amount uint, display bool) string {
 	// get the campaign if it exists
 	campaign, ok := campaigns.Get(campaignId)
 	if !ok {
@@ -94,7 +94,7 @@ func AddContributor(campaignId string, display bool) string {
 	}
 
 	sentCoins := std.GetOrigSend()
-	amount := sentCoins.AmountOf("ugnot")
+	// amount := sentCoins.AmountOf("ugnot")
 
 	// add the contributor to the campaign
 	campaign.(*pkg.Campaign).AddContributor(user.(*pkg.User), amount, display)

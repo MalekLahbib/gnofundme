@@ -109,6 +109,7 @@ func CampaignToJSONString(campaign *Campaign) string {
 	sb.WriteString(`"goal":"` + strconv.Itoa(int(campaign.goal)) + `",`)
 	sb.WriteString(`"current":"` + strconv.Itoa(int(campaign.current)) + `",`)
 	sb.WriteString(`"begin":"` + strconv.Itoa(int(campaign.begin.Unix())) + `",`)
+	sb.WriteString(`"deadline":"` + strconv.Itoa(int(campaign.deadline.Unix())) + `",`)
 	sb.WriteString(`"owner":"` + campaign.owner.GetAddress().String() + `",`)
 	sb.WriteString(`"beneficiary":"` + campaign.beneficiary.GetAddress().String() + `",`)
 	sb.WriteString(`"contributors":"` + strconv.Itoa(len(campaign.contributors)) + `"`)

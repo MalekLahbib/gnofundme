@@ -42,7 +42,7 @@ const AddCampaignForm = ({updateShowForm}: {updateShowForm: (value: boolean) => 
               pkg_path: Config.REALM_PATH,
               func: 'NewCampaign',
               args: [
-                title, description, `${goal}`, `${begin}`, `${deadline}`, beneficiary
+                title, description, `${goal}`, `${begin/1000}`, `${deadline/1000}`, beneficiary
               ]
             }
           }

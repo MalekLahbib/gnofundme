@@ -9,8 +9,8 @@ const Campaign: FC<ICampaignProps> = (props) => {
         <span>Description: {campaign.description}</span>
         <span>Goal: {campaign.goal}</span>
         <span>Current: {campaign.current}</span>
-        <span>Begin: {new Date(campaign.begin * 10).toString()}</span>
-        <span>Deadline: {new Date(campaign.deadline * 10).toString()}</span>
+        <span>Begin: {new Date(campaign.begin * 1000).toString()}</span>
+        <span>Deadline: {new Date(campaign.deadline * 1000).toString()}</span>
         <span>Beneficiary: {campaign.beneficiary}</span>
     </div>
   )

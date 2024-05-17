@@ -8,20 +8,25 @@ import (
 )
 
 var (
-	title              = "Campaign 1"
-	description        = "Description 1"
-	goal               = 1000
-	ownerAddress       = testutils.TestAddress("owner")
-	beneficiaryAddress = testutils.TestAddress("beneficiary")
-	owner              = NewUser("Owner", "", ownerAddress)
-	beneficiary        = NewUser("Beneficiary", "", beneficiaryAddress)
+	ctype              Ctype = Ctype(Personal)
+	title                    = "Campaign 1"
+	description              = "Description 1"
+	goal                     = 1000
+	ownerAddress             = testutils.TestAddress("owner")
+	beneficiaryAddress       = testutils.TestAddress("beneficiary")
+	owner                    = NewUser("Owner", "", ownerAddress)
+	beneficiary              = NewUser("Beneficiary", "", beneficiaryAddress)
 	// Test case 1 Valid campaign
 	begin    = time.Now()
 	deadline = begin.Add(time.Hour * 24)
-	campaign = NewCampaign(title, description, 1000, begin, deadline, owner, beneficiary)
+	campaign = NewCampaign(ctype, title, description, 1000, begin, deadline, owner, beneficiary)
 )
 
 func TestNewCampaign(t *testing.T) {
+	if campaign.GetCtype() != ctype {
+		t.Errorf("Expected campaign type to be Personal, got %s", campaign.GetCtype())
+	}
+
 	if campaign.GetTitle() != title {
 		t.Errorf("Expected campaign name to be 'Campaign 1', got '%s'", campaign.GetTitle())
 	}

@@ -9,7 +9,25 @@ import (
 	"gno.land/p/demo/avl"
 )
 
+type Ctype int // Campaign type
+
+const (
+	// for a person (yourself or another person): can be for humanitarian reason, emergency needs, or other
+	Personal Ctype = iota
+	// for a cause: you will manage the funds (based on trust)
+	Cause Ctype
+	// for an organism, charity...
+	Organism Ctype
+	// Donation  Crowdfunding
+	DonationC Ctype
+	// Reward Crowdfunding
+	RewardC Ctype
+	// Equity Crowdfunding
+	EquityC Ctype
+)
+
 type Campaign struct {
+	ctype        Ctype
 	title        string
 	description  string
 	goal         uint
@@ -21,8 +39,9 @@ type Campaign struct {
 	contributors []*Contributor
 }
 
-func NewCampaign(title string, description string, goal uint, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
+func NewCampaign(ctype Ctype, title string, description string, goal uint, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
 	return &Campaign{
+		ctype:        ctype,
 		title:        title,
 		description:  description,
 		goal:         goal,
@@ -33,6 +52,10 @@ func NewCampaign(title string, description string, goal uint, begin time.Time, d
 		beneficiary:  beneficiary,
 		contributors: make([]*Contributor, 0),
 	}
+}
+
+func (c Campaign) GetCtype() Ctype {
+	return c.ctype
 }
 
 func (c Campaign) GetTitle() string {

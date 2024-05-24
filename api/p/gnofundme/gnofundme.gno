@@ -1,12 +1,9 @@
 package gnofundme
 
 import (
-	"std"
 	"strconv"
 	"strings"
 	"time"
-
-	"gno.land/p/demo/avl"
 )
 
 type Ctype int // Campaign type
@@ -15,15 +12,15 @@ const (
 	// for a person (yourself or another person): can be for humanitarian reason, emergency needs, or other
 	Personal Ctype = iota
 	// for a cause: you will manage the funds (based on trust)
-	Cause Ctype
+	Cause Ctype = iota
 	// for an organism, charity...
-	Organism Ctype
+	Organism Ctype = iota
 	// Donation  Crowdfunding
-	DonationC Ctype
+	DonationC Ctype = iota
 	// Reward Crowdfunding
-	RewardC Ctype
+	RewardC Ctype = iota
 	// Equity Crowdfunding
-	EquityC Ctype
+	EquityC Ctype = iota
 )
 
 type Campaign struct {
@@ -90,6 +87,10 @@ func (c Campaign) GetBeneficiary() *User {
 	return c.beneficiary
 }
 
+func (c Campaign) GetContributors() []*Contributor {
+	return c.contributors
+}
+
 func (c *Campaign) AddContributor(user *User, amount uint, display bool) {
 	c.current += amount
 	contributor := &Contributor{
@@ -99,10 +100,6 @@ func (c *Campaign) AddContributor(user *User, amount uint, display bool) {
 		display: display,
 	}
 	c.contributors = append(c.contributors, contributor)
-}
-
-func (c Campaign) GetContributors() []*Contributor {
-	return c.contributors
 }
 
 // CampaignsToJSONString converts a slice of Campaigns structs into a JSON string

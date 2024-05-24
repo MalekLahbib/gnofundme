@@ -9,7 +9,7 @@ type User struct {
 	campaigns []*Campaign
 }
 
-func NewUser(name string, email string, address std.Address) *User {
+func NewUser(name, email string, address std.Address) *User {
 	return &User{
 		name:    name,
 		email:   email,

@@ -68,7 +68,7 @@ func NewCampaign(title string, description string, goal uint, beginT int64, dead
 	deadline := time.Unix(deadlineT, 0)
 
 	// create the campaign
-	campaign := pkg.NewCampaign(title, description, goal, begin, deadline, owner, beneficiaryU)
+	campaign := pkg.NewCampaign(pkg.Ctype(0), title, description, goal, begin, deadline, owner, beneficiaryU)
 
 	// the key will be the size of the tree
 	key := campaigns.Size()
@@ -81,7 +81,7 @@ func AddContributor(campaignId string, amount uint, display bool) string {
 	// get the campaign if it exists
 	campaign, ok := campaigns.Get(campaignId)
 	if !ok {
-		return "campaign not found"
+		panic("campaign not found")
 	}
 
 	// get the user address
@@ -93,7 +93,7 @@ func AddContributor(campaignId string, amount uint, display bool) string {
 		panic("user is not registered")
 	}
 
-	sentCoins := std.GetOrigSend()
+	// sentCoins := std.GetOrigSend()
 	// amount := sentCoins.AmountOf("ugnot")
 
 	// add the contributor to the campaign
@@ -187,49 +187,31 @@ func renderCampaign(id string) string {
 	var b bytes.Buffer
 	c := campaign.(*pkg.Campaign)
 	b.WriteString(
-		ufmt.Sprintf(
-			"# Campaign %s\n", id,
-		),
+		ufmt.Sprintf("# Campaign %s\n", id),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"## Description: %s\n", c.GetDescription(),
-		),
+		ufmt.Sprintf("## Description: %s\n", c.GetDescription()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"### Goal: %d ", c.GetGoal(),
-		),
+		ufmt.Sprintf("### Goal: %d ", c.GetGoal()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"********** Current: %d\n", c.GetCurrent(),
-		),
+		ufmt.Sprintf("********** Current: %d\n", c.GetCurrent()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"### Begin: %s", c.GetBegin().String(),
-		),
+		ufmt.Sprintf("### Begin: %s", c.GetBegin().String()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"  ------------->  Deadline: %s\n", c.GetDeadline().String(),
-		),
+		ufmt.Sprintf("  ------------->  Deadline: %s\n", c.GetDeadline().String()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"### Owner: %s, %s\n", c.GetOwner().GetName(), c.GetOwner().GetAddress(),
-		),
+		ufmt.Sprintf("### Owner: %s, %s\n", c.GetOwner().GetName(), c.GetOwner().GetAddress()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"### Beneficiary: %s, %s\n", c.GetBeneficiary().GetName(), c.GetBeneficiary().GetAddress(),
-		),
+		ufmt.Sprintf("### Beneficiary: %s, %s\n", c.GetBeneficiary().GetName(), c.GetBeneficiary().GetAddress()),
 	)
 	b.WriteString(
-		ufmt.Sprintf(
-			"## Contributors: %d\n", len(c.GetContributors()),
-		),
+		ufmt.Sprintf("## Contributors: %d\n", len(c.GetContributors())),
 	)
 	if len(c.GetContributors()) != 0 {
 		contributors := c.GetContributors()

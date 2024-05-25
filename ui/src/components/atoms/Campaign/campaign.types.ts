@@ -1,4 +1,5 @@
 export interface ICampaign {
+	ctype 		 : number;
     title        : string;
 	description  : string;
 	goal         : number;

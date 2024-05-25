@@ -22,7 +22,7 @@ const Body = () => {
       Config.REALM_PATH,
       `GetCampaigns()`
     );
-    
+
     // Parse the campaigns response
     return parseCampaignFetchResponse(response);
   };

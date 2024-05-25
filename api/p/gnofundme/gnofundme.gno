@@ -6,25 +6,24 @@ import (
 	"time"
 )
 
-type Ctype int // Campaign type
+// ctype: Campaign type, will be an int
 
-const (
-	// for a person (yourself or another person): can be for humanitarian reason, emergency needs, or other
-	Personal Ctype = iota
-	// for a cause: you will manage the funds (based on trust)
-	Cause Ctype = iota
-	// for an organism, charity...
-	Organism Ctype = iota
-	// Donation  Crowdfunding
-	DonationC Ctype = iota
-	// Reward Crowdfunding
-	RewardC Ctype = iota
-	// Equity Crowdfunding
-	EquityC Ctype = iota
-)
+// campaign types :
+
+// 0: Personal, for a person (yourself or another person): can be for humanitarian reason, emergency needs, or other
+
+// 1: Cause, for a cause: you will manage the funds (based on trust)
+
+// 2: Organism, for an organism, charity...
+
+// 3: Donation  Donation Crowdfunding
+
+// 4: RewardC,  Reward Crowdfunding
+
+// 5: EquityC, Equity Crowdfunding
 
 type Campaign struct {
-	ctype        Ctype
+	ctype        int
 	title        string
 	description  string
 	goal         uint
@@ -36,7 +35,7 @@ type Campaign struct {
 	contributors []*Contributor
 }
 
-func NewCampaign(ctype Ctype, title string, description string, goal uint, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
+func NewCampaign(ctype int, title string, description string, goal uint, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
 	return &Campaign{
 		ctype:        ctype,
 		title:        title,
@@ -51,7 +50,7 @@ func NewCampaign(ctype Ctype, title string, description string, goal uint, begin
 	}
 }
 
-func (c Campaign) GetCtype() Ctype {
+func (c Campaign) GetCtype() int {
 	return c.ctype
 }
 
@@ -124,6 +123,7 @@ func CampaignToJSONString(campaign *Campaign) string {
 	var sb strings.Builder
 
 	sb.WriteString("{")
+	sb.WriteString(`"ctype":"` + strconv.Itoa(campaign.ctype) + `",`)
 	sb.WriteString(`"title":"` + campaign.title + `",`)
 	sb.WriteString(`"description":"` + escapeString(campaign.description) + `",`)
 	sb.WriteString(`"goal":"` + strconv.Itoa(int(campaign.goal)) + `",`)

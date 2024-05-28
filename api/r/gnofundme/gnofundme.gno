@@ -29,13 +29,17 @@ func NewUser(name string, email string) string {
 	// create the user
 	user := GFMpkg.NewUser(name, email, address)
 
-	// the avl.tree key will be address to simplify the fetching
+	// the avl.tree key will be the address to simplify the fetching
 	users.Set(address.String(), user)
 
 	return user.GetName() + " added successfully"
 }
 
-func NewCampaign(ctype int, title string, description string, goal uint, beginT int64, deadlineT int64, beneficiary std.Address) (int, string) {
+func NewCampaign(ctype int, title string, description string, goal int64, beginT int64, deadlineT int64, beneficiary std.Address) (int, string) {
+	if ctype < 0 || ctype > 5 {
+		panic("invalid campaign type")
+	}
+
 	var owner, beneficiaryU *GFMpkg.User
 	// gets the caller address (owner of the campaign)
 	caller := std.GetOrigCaller()
@@ -81,11 +85,11 @@ func NewCampaign(ctype int, title string, description string, goal uint, beginT 
 	// the key will be the size of the tree
 	key := campaigns.Size()
 	campaigns.Set(strconv.Itoa(key), campaign)
-
+	std.Emit("Campaign Creation", "campaign_created", GFMpkg.CampaignToJSONString(campaign))
 	return key, "campaign created successfully"
 }
 
-func AddContributor(campaignId string, amount uint, display bool) string {
+func AddContributor(campaignId string, display bool) string {
 	// get the campaign if it exists
 	campaign, ok := campaigns.Get(campaignId)
 	if !ok {
@@ -101,8 +105,8 @@ func AddContributor(campaignId string, amount uint, display bool) string {
 		panic("user is not registered")
 	}
 
-	// sentCoins := std.GetOrigSend()
-	// amount := sentCoins.AmountOf("ugnot")
+	sentCoins := std.GetOrigSend()
+	amount := sentCoins.AmountOf("ugnot")
 
 	// add the contributor to the campaign
 	campaign.(*GFMpkg.Campaign).AddContributor(user.(*GFMpkg.User), amount, display)

@@ -23,19 +23,29 @@ import (
 // 5: EquityC, Equity Crowdfunding
 
 type Campaign struct {
-	ctype        int
-	title        string
-	description  string
-	goal         uint
-	current      uint
-	begin        time.Time
-	deadline     time.Time
-	owner        *User
-	beneficiary  *User
+	// Campaign type
+	ctype int
+	// Campaign title
+	title string
+	// Campaign description
+	description string
+	// Campaign goal
+	goal int64
+	// Current amount of money raised
+	current int64
+	// Campaign begin date
+	begin time.Time
+	// Campaign deadline
+	deadline time.Time
+	// Campaign owner
+	owner *User
+	// Campaign beneficiary (can be different from the owner)
+	beneficiary *User
+	// Campaign contributors
 	contributors []*Contributor
 }
 
-func NewCampaign(ctype int, title string, description string, goal uint, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
+func NewCampaign(ctype int, title string, description string, goal int64, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
 	return &Campaign{
 		ctype:        ctype,
 		title:        title,
@@ -62,11 +72,11 @@ func (c Campaign) GetDescription() string {
 	return c.description
 }
 
-func (c Campaign) GetGoal() uint {
+func (c Campaign) GetGoal() int64 {
 	return c.goal
 }
 
-func (c Campaign) GetCurrent() uint {
+func (c Campaign) GetCurrent() int64 {
 	return c.current
 }
 
@@ -90,14 +100,9 @@ func (c Campaign) GetContributors() []*Contributor {
 	return c.contributors
 }
 
-func (c *Campaign) AddContributor(user *User, amount uint, display bool) {
+func (c *Campaign) AddContributor(user *User, amount int64, display bool) {
 	c.current += amount
-	contributor := &Contributor{
-		user:    user,
-		date:    time.Now(),
-		amount:  amount,
-		display: display,
-	}
+	contributor := NewContributor(user, amount, display)
 	c.contributors = append(c.contributors, contributor)
 }
 

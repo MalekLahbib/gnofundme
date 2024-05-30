@@ -1,6 +1,9 @@
 package gnofundme
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type Contributor struct {
 	// the user who contributed
@@ -36,4 +39,20 @@ func (c Contributor) GetAmount() int64 {
 
 func (c Contributor) GetDisplay() bool {
 	return c.display
+}
+
+func (c Contributor) String() string {
+	return "Contributor{" +
+		"Contributor Address: " + c.user.GetAddress().String() +
+		", date: " + c.date.Format(time.RFC822) +
+		", amount: " + strconv.Itoa(int(c.amount)) +
+		", display: " + FormatBool(c.display) +
+		"}"
+}
+
+func FormatBool(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
 }

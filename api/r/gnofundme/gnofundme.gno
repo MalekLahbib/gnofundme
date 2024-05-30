@@ -101,6 +101,7 @@ func AddContributor(campaignId string, display bool) string {
 
 	// get the user if he exists
 	user, ok := users.Get(userAddress.String())
+	// Maybe this condition will deleted in the final version,as anyone can contribute to a campaign
 	if !ok {
 		panic("user is not registered")
 	}
@@ -109,8 +110,8 @@ func AddContributor(campaignId string, display bool) string {
 	amount := sentCoins.AmountOf("ugnot")
 
 	// add the contributor to the campaign
-	campaign.(*GFMpkg.Campaign).AddContributor(user.(*GFMpkg.User), amount, display)
-
+	contributor := campaign.(*GFMpkg.Campaign).AddContributor(user.(*GFMpkg.User), amount, display)
+	std.Emit("Add Contributor", "contributor_added", contributor.String())
 	return "contributor added successfully"
 }
 

@@ -1,3 +1,4 @@
+// Package gnofundme provides a simple crowdfunding system.
 package gnofundme
 
 import (
@@ -100,10 +101,11 @@ func (c Campaign) GetContributors() []*Contributor {
 	return c.contributors
 }
 
-func (c *Campaign) AddContributor(user *User, amount int64, display bool) {
+func (c *Campaign) AddContributor(user *User, amount int64, display bool) *Contributor {
 	c.current += amount
 	contributor := NewContributor(user, amount, display)
 	c.contributors = append(c.contributors, contributor)
+	return contributor
 }
 
 // CampaignsToJSONString converts a slice of Campaigns structs into a JSON string

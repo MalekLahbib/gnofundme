@@ -39,7 +39,7 @@ for example:
 
 ```bash
 VITE_CHAIN_ID="dev"
-VITE_CHAIN_RPC="ws://127.0.0.1:36657/websocket" 
+VITE_CHAIN_RPC="ws://127.0.0.1:26657/websocket" 
 VITE_REALM_PATH="gno.land/r/malek/gnofundme"
 ```
 

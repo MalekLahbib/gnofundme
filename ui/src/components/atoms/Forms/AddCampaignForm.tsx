@@ -8,6 +8,7 @@ import Config from "../../../config.ts";
 const AddCampaignForm = ({updateShowForm}: {updateShowForm: (value: boolean) => void}) => {
   const { address } = useContext(AccountContext);
   const { provider } = useContext(ProviderContext);
+  const [ctype, setCtype] = useState<number>(0); // 0: Personal, 1: Cause, 2: Organism, 3: Donation, 4: Reward, 5: Equity
   const [beneficiary, setBeneficiary] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -42,7 +43,7 @@ const AddCampaignForm = ({updateShowForm}: {updateShowForm: (value: boolean) => 
               pkg_path: Config.REALM_PATH,
               func: 'NewCampaign',
               args: [
-                title, description, `${goal}`, `${begin/1000}`, `${deadline/1000}`, beneficiary
+                `${ctype}`, title, description, `${goal}`, `${begin/1000}`, `${deadline/1000}`, beneficiary
               ]
             }
           }
@@ -59,12 +60,31 @@ const AddCampaignForm = ({updateShowForm}: {updateShowForm: (value: boolean) => 
     // });
   }
 
+  // function handleChange(myRadio) {
+  //   setCtype(myRadio.value);
+  // }
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md z-10 w-1/2 border border-gray-200">
       <div className="flex items-center justify-center">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Create Campaign</h2>
       </div>
       <form className="mt-4">
+      <div className="flex flex-row justify-between">
+        <span>Campaign type : </span>
+        <input type="radio" id="Personal" name="ctype" value={0} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Personal"> Personal</label>
+        <input type="radio" id="Cause" name= "ctype" value={1} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Cause"> Cause</label>
+        <input type="radio" id="Organism" name="ctype" value={2} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Organism"> Organism</label>
+        <input type="radio" id="Donation" name="ctype" value={3} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Donation"> Donation</label>
+        <input type="radio" id="Reward" name="ctype" value={4} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Reward"> Reward</label>
+        <input type="radio" id="Equity" name="ctype" value={5} onChange={e => setCtype(Number(e.target.value))}/>
+        <label htmlFor="Equity"> Equity</label>
+      </div>
         <label className="flex justify-between items-center text-sm flex-row">
           <span className="text-gray-700 dark:text-gray-400">Beneficiary : </span>
           <input type="text" className="form-input w-5/6 mt-1 block rounded-md border border-indigo-600" placeholder='g1ngj4vvjesklx9awy809expyvae9jt765pt3xe6' onChange={e => setBeneficiary(e.target.value)} />

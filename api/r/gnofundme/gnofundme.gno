@@ -31,7 +31,7 @@ func NewUser(name string, email string) string {
 
 	// the avl.tree key will be the address to simplify the fetching
 	users.Set(address.String(), user)
-
+	std.Emit("User Creation", "user_created", user.GetAddress().String())
 	return user.GetName() + " added successfully"
 }
 
@@ -101,7 +101,7 @@ func AddContributor(campaignId string, display bool) string {
 
 	// get the user if he exists
 	user, ok := users.Get(userAddress.String())
-	// Maybe this condition will deleted in the final version,as anyone can contribute to a campaign
+	// Maybe this condition will deleted in the final version, as anyone can contribute to a campaign without hvaving to be registered
 	if !ok {
 		panic("user is not registered")
 	}

@@ -34,7 +34,7 @@ const Body = () => {
     });
     console.log("campaigns: ",displayedCampaigns);
     
-  }, []);
+  }, [showForm]);
 
   return (
     <div className='flex items-center flex-col'>

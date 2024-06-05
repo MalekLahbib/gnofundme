@@ -8,93 +8,50 @@ import (
 )
 
 // ctype: Campaign type, will be an int
-
 // campaign types :
-
 // 0: Personal, for a person (yourself or another person): can be for humanitarian reason, emergency needs, or other
-
 // 1: Cause, for a cause: you will manage the funds (based on trust)
-
 // 2: Organism, for an organism, charity...
-
 // 3: Donation  Donation Crowdfunding
-
 // 4: RewardC,  Reward Crowdfunding
-
 // 5: EquityC, Equity Crowdfunding
 
 type Campaign struct {
 	// Campaign type
-	ctype int
+	Ctype int
 	// Campaign title
-	title string
+	Title string
 	// Campaign description
-	description string
+	Description string
 	// Campaign goal
-	goal int64
+	Goal int64
 	// Current amount of money raised
-	current int64
+	Current int64
 	// Campaign begin date
-	begin time.Time
+	Begin time.Time
 	// Campaign deadline
-	deadline time.Time
+	Deadline time.Time
 	// Campaign owner
-	owner *User
+	Owner *User
 	// Campaign beneficiary (can be different from the owner)
-	beneficiary *User
+	Beneficiary *User
 	// Campaign contributors
 	contributors []*Contributor
 }
 
 func NewCampaign(ctype int, title string, description string, goal int64, begin time.Time, deadline time.Time, owner *User, beneficiary *User) *Campaign {
 	return &Campaign{
-		ctype:        ctype,
-		title:        title,
-		description:  description,
-		goal:         goal,
-		current:      0,
-		begin:        begin,
-		deadline:     deadline,
-		owner:        owner,
-		beneficiary:  beneficiary,
+		Ctype:        ctype,
+		Title:        title,
+		Description:  description,
+		Goal:         goal,
+		Current:      0,
+		Begin:        begin,
+		Deadline:     deadline,
+		Owner:        owner,
+		Beneficiary:  beneficiary,
 		contributors: make([]*Contributor, 0),
 	}
-}
-
-func (c Campaign) GetCtype() int {
-	return c.ctype
-}
-
-func (c Campaign) GetTitle() string {
-	return c.title
-}
-
-func (c Campaign) GetDescription() string {
-	return c.description
-}
-
-func (c Campaign) GetGoal() int64 {
-	return c.goal
-}
-
-func (c Campaign) GetCurrent() int64 {
-	return c.current
-}
-
-func (c Campaign) GetBegin() time.Time {
-	return c.begin
-}
-
-func (c Campaign) GetDeadline() time.Time {
-	return c.deadline
-}
-
-func (c Campaign) GetOwner() *User {
-	return c.owner
-}
-
-func (c Campaign) GetBeneficiary() *User {
-	return c.beneficiary
 }
 
 func (c Campaign) GetContributors() []*Contributor {
@@ -102,7 +59,7 @@ func (c Campaign) GetContributors() []*Contributor {
 }
 
 func (c *Campaign) AddContributor(user *User, amount int64, display bool) *Contributor {
-	c.current += amount
+	c.Current += amount
 	contributor := NewContributor(user, amount, display)
 	c.contributors = append(c.contributors, contributor)
 	return contributor
@@ -130,15 +87,15 @@ func CampaignToJSONString(campaign *Campaign) string {
 	var sb strings.Builder
 
 	sb.WriteString("{")
-	sb.WriteString(`"ctype":"` + strconv.Itoa(campaign.ctype) + `",`)
-	sb.WriteString(`"title":"` + campaign.title + `",`)
-	sb.WriteString(`"description":"` + escapeString(campaign.description) + `",`)
-	sb.WriteString(`"goal":"` + strconv.Itoa(int(campaign.goal)) + `",`)
-	sb.WriteString(`"current":"` + strconv.Itoa(int(campaign.current)) + `",`)
-	sb.WriteString(`"begin":"` + strconv.Itoa(int((campaign.begin).Unix())) + `",`)
-	sb.WriteString(`"deadline":"` + strconv.Itoa(int(campaign.deadline.Unix())) + `",`)
-	sb.WriteString(`"owner":"` + campaign.owner.GetAddress().String() + `",`)
-	sb.WriteString(`"beneficiary":"` + campaign.beneficiary.GetAddress().String() + `",`)
+	sb.WriteString(`"ctype":"` + strconv.Itoa(campaign.Ctype) + `",`)
+	sb.WriteString(`"title":"` + campaign.Title + `",`)
+	sb.WriteString(`"description":"` + escapeString(campaign.Description) + `",`)
+	sb.WriteString(`"goal":"` + strconv.Itoa(int(campaign.Goal)) + `",`)
+	sb.WriteString(`"current":"` + strconv.Itoa(int(campaign.Current)) + `",`)
+	sb.WriteString(`"begin":"` + strconv.Itoa(int((campaign.Begin).Unix())) + `",`)
+	sb.WriteString(`"deadline":"` + strconv.Itoa(int(campaign.Deadline.Unix())) + `",`)
+	sb.WriteString(`"owner":"` + campaign.Owner.GetAddress().String() + `",`)
+	sb.WriteString(`"beneficiary":"` + campaign.Beneficiary.GetAddress().String() + `",`)
 	sb.WriteString(`"contributors":"` + strconv.Itoa(len(campaign.contributors)) + `"`)
 	sb.WriteString("}")
 

@@ -35,7 +35,7 @@ func NewUser(name string, email string) string {
 	return user.GetName() + " added successfully"
 }
 
-func NewCampaign(ctype int, title string, description string, goal int64, beginT int64, deadlineT int64, beneficiary std.Address) (int, string) {
+func NewCampaign(ctype int, title string, description string, goal int64, beginT int64, deadlineT int64, beneficiary std.Address) string {
 	if ctype < 0 || ctype > 5 {
 		panic("invalid campaign type")
 	}
@@ -76,9 +76,17 @@ func NewCampaign(ctype int, title string, description string, goal int64, beginT
 	}
 
 	// create the time objects
+	if beginT < time.Now().Unix() {
+		panic("begin date must be in the future")
+	}
+	if deadlineT < time.Now().Unix() {
+		panic("deadline date must be in the future")
+	}
+	if deadlineT < beginT {
+		panic("deadline date must be after begin date")
+	}
 	begin := time.Unix(beginT, 0)
 	deadline := time.Unix(deadlineT, 0)
-
 	// create the campaign
 	campaign := GFMpkg.NewCampaign(ctype, title, description, goal, begin, deadline, owner, beneficiaryU)
 
@@ -86,7 +94,7 @@ func NewCampaign(ctype int, title string, description string, goal int64, beginT
 	key := campaigns.Size()
 	campaigns.Set(strconv.Itoa(key), campaign)
 	std.Emit("Campaign Creation", "campaign_created", GFMpkg.CampaignToJSONString(campaign))
-	return key, "campaign created successfully"
+	return "Campaign N°" + strconv.Itoa(key) + "created successfully"
 }
 
 func AddContributor(campaignId string, display bool) string {
@@ -163,7 +171,7 @@ func renderHomePage() string {
 		)
 		b.WriteString(
 			ufmt.Sprintf(
-				"### Description: %s\n", c.GetDescription(),
+				"### Description: %s\n", c.Description,
 			),
 		)
 
@@ -203,25 +211,25 @@ func renderCampaign(id string) string {
 		ufmt.Sprintf("# Campaign %s\n", id),
 	)
 	b.WriteString(
-		ufmt.Sprintf("## Description: %s\n", c.GetDescription()),
+		ufmt.Sprintf("## Description: %s\n", c.Description),
 	)
 	b.WriteString(
-		ufmt.Sprintf("### Goal: %d ", c.GetGoal()),
+		ufmt.Sprintf("### Goal: %d ", c.Goal),
 	)
 	b.WriteString(
-		ufmt.Sprintf("********** Current: %d\n", c.GetCurrent()),
+		ufmt.Sprintf("********** Current: %d\n", c.Current),
 	)
 	b.WriteString(
-		ufmt.Sprintf("### Begin: %s", c.GetBegin().String()),
+		ufmt.Sprintf("### Begin: %s", c.Begin.String()),
 	)
 	b.WriteString(
-		ufmt.Sprintf("  ------------->  Deadline: %s\n", c.GetDeadline().String()),
+		ufmt.Sprintf("  ------------->  Deadline: %s\n", c.Deadline.String()),
 	)
 	b.WriteString(
-		ufmt.Sprintf("### Owner: %s, %s\n", c.GetOwner().GetName(), c.GetOwner().GetAddress()),
+		ufmt.Sprintf("### Owner: %s, %s\n", c.Owner.GetName(), c.Owner.GetAddress()),
 	)
 	b.WriteString(
-		ufmt.Sprintf("### Beneficiary: %s, %s\n", c.GetBeneficiary().GetName(), c.GetBeneficiary().GetAddress()),
+		ufmt.Sprintf("### Beneficiary: %s, %s\n", c.Beneficiary.GetName(), c.Beneficiary.GetAddress()),
 	)
 	b.WriteString(
 		ufmt.Sprintf("## Contributors: %d\n", len(c.GetContributors())),
@@ -232,13 +240,13 @@ func renderCampaign(id string) string {
 			if contributor.GetDisplay() {
 				b.WriteString(
 					ufmt.Sprintf(
-						"### %s: %d\n", contributor.GetUser().GetName(), contributor.GetAmount(),
+						"### %s: %d\n", contributor.GetUser().GetName(), contributor.Amount,
 					),
 				)
 			} else {
 				b.WriteString(
 					ufmt.Sprintf(
-						"### Anonymous: %d\n", contributor.GetAmount(),
+						"### Anonymous: %d\n", contributor.Amount,
 					),
 				)
 			}

@@ -9,9 +9,9 @@ type Contributor struct {
 	// the user who contributed
 	user *User
 	// the date of the contribution
-	date time.Time
+	Date time.Time
 	// the amount of the contribution
-	amount int64
+	Amount int64
 	// whether the contributor wants to be displayed (Anonymous in case of false)
 	display bool
 }
@@ -19,22 +19,14 @@ type Contributor struct {
 func NewContributor(user *User, amount int64, display bool) *Contributor {
 	return &Contributor{
 		user:    user,
-		date:    time.Now(),
-		amount:  amount,
+		Date:    time.Now(),
+		Amount:  amount,
 		display: display,
 	}
 }
 
 func (c Contributor) GetUser() *User {
 	return c.user
-}
-
-func (c Contributor) GetDate() time.Time {
-	return c.date
-}
-
-func (c Contributor) GetAmount() int64 {
-	return c.amount
 }
 
 func (c Contributor) GetDisplay() bool {
@@ -44,8 +36,8 @@ func (c Contributor) GetDisplay() bool {
 func (c Contributor) String() string {
 	return "Contributor{" +
 		"Contributor Address: " + c.user.GetAddress().String() +
-		", date: " + c.date.Format(time.RFC822) +
-		", amount: " + strconv.Itoa(int(c.amount)) +
+		", date: " + c.Date.Format(time.RFC822) +
+		", amount: " + strconv.Itoa(int(c.Amount)) +
 		", display: " + FormatBool(c.display) +
 		"}"
 }

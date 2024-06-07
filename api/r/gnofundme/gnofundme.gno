@@ -75,7 +75,7 @@ func NewCampaign(ctype int, title string, description string, goal int64, beginT
 		beneficiaryU = owner
 	}
 
-	// create the time objects
+	// Verfiy that the dates are correct
 	if beginT < time.Now().Unix() {
 		panic("begin date must be in the future")
 	}
@@ -85,6 +85,8 @@ func NewCampaign(ctype int, title string, description string, goal int64, beginT
 	if deadlineT < beginT {
 		panic("deadline date must be after begin date")
 	}
+
+	// creates the time objects
 	begin := time.Unix(beginT, 0)
 	deadline := time.Unix(deadlineT, 0)
 	// create the campaign
@@ -94,7 +96,7 @@ func NewCampaign(ctype int, title string, description string, goal int64, beginT
 	key := campaigns.Size()
 	campaigns.Set(strconv.Itoa(key), campaign)
 	std.Emit("Campaign Creation", "campaign_created", GFMpkg.CampaignToJSONString(campaign))
-	return "Campaign N°" + strconv.Itoa(key) + "created successfully"
+	return "Campaign N°" + strconv.Itoa(key) + " created successfully"
 }
 
 func AddContributor(campaignId string, display bool) string {
@@ -151,8 +153,8 @@ func Render(path string) string {
 }
 
 func renderHomePage() string {
-	banker := std.GetBanker(std.BankerTypeRealmIssue)
-	banker.IssueCoin(std.CurrentRealm().Addr(), "ugnot", 350000000)
+	banker := std.GetBanker(std.BankerTypeReadonly)
+	// banker.IssueCoin(std.CurrentRealm().Addr(), "ugnot", 350000000)
 	balance := banker.GetCoins(std.CurrentRealm().Addr())
 	// define empty buffer
 	var b bytes.Buffer

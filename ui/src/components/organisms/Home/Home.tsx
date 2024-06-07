@@ -11,9 +11,7 @@ const Home = () => {
     <>
         <Header />
         <Body />
-        
-        <Footer /> 
-        
+        <Footer />
         <Toaster />
     </>
   );

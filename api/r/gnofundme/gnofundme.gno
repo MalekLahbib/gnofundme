@@ -138,6 +138,14 @@ func GetCampaigns() string {
 	return GFMpkg.CampaignsToJSONString(campaignsArray)
 }
 
+func IsUserRegistered() bool {
+	// get the user address
+	userAddress := std.GetOrigCaller()
+	// verify if the user exists
+	_, ok := users.Get(userAddress.String())
+	return ok
+}
+
 func Render(path string) string {
 	if path == "" {
 		return renderHomePage()
@@ -185,7 +193,7 @@ func renderHomePage() string {
 		u := value.(*GFMpkg.User)
 		b.WriteString(
 			ufmt.Sprintf(
-				"## User #%d: %s\n", userc, u.GetName(),
+				"## User #%d: %s, Key: %s\n", userc, u.GetName(), key,
 			),
 		)
 		b.WriteString(
@@ -211,6 +219,9 @@ func renderCampaign(id string) string {
 	c := campaign.(*GFMpkg.Campaign)
 	b.WriteString(
 		ufmt.Sprintf("# Campaign %s\n", id),
+	)
+	b.WriteString(
+		ufmt.Sprintf("## Title: %s\n", c.Title),
 	)
 	b.WriteString(
 		ufmt.Sprintf("## Description: %s\n", c.Description),

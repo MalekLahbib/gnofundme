@@ -39,10 +39,8 @@ const Connect: FC<IConnectProps> = () => {
 
       const response: string = await provider.evaluateExpression(
         Config.REALM_PATH,
-        `IsUserRegistered()`
+        `IsUserRegistered("${accountInfo.address}")`
       );
-
-      console.log("response: ", response);
         
       if (response.includes("false")) {
         console.log("User not registered");
@@ -57,7 +55,6 @@ const Connect: FC<IConnectProps> = () => {
           }
         );
       } else {
-        console.log("User registered");
         toast.success('User Registered',
           {
             position: 'bottom-right',

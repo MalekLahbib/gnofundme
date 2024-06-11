@@ -31,9 +31,7 @@ const Body = () => {
     fetchCampaigns()
     .then((campaigns: ICampaign[]) => {
       setDisplayedCampaigns(campaigns);
-    });
-    console.log("campaigns: ",displayedCampaigns);
-    
+    });    
   }, [showForm]);
 
   return (

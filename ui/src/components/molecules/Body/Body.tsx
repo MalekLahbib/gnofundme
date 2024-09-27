@@ -17,12 +17,12 @@ const Body = () => {
     if (!provider) {
       throw new Error('invalid chain RPC URL');
     }
-
+    
     const response: string = await provider.evaluateExpression(
       Config.REALM_PATH,
       `GetCampaigns()`
     );
-
+    
     // Parse the campaigns response
     return parseCampaignFetchResponse(response);
   };

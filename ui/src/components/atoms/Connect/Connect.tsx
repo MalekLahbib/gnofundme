@@ -36,12 +36,12 @@ const Connect: FC<IConnectProps> = () => {
       if (!provider) {
         throw new Error('invalid chain RPC URL');
       }
-
+      
       const response: string = await provider.evaluateExpression(
         Config.REALM_PATH,
         `IsUserRegistered("${accountInfo.address}")`
       );
-        
+      
       if (response.includes("false")) {
         console.log("User not registered");
         toast.error('User not registered',

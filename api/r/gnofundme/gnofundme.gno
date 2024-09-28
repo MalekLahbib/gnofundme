@@ -138,7 +138,7 @@ func GetCampaigns() string {
 	return GFMpkg.CampaignsToJSONString(campaignsArray)
 }
 
-func IsUserRegistered(userAddress string) bool {
+func isUserRegistered(userAddress string) bool {
 
 	// verify if the user exists
 	_, ok := users.Get(userAddress)

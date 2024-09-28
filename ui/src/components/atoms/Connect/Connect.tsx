@@ -33,17 +33,28 @@ const Connect: FC<IConnectProps> = () => {
       setAddress(accountInfo.address);
       setChainID(Config.CHAIN_ID);
 
+      toast.success('Successfully connected to Adena',
+        {
+          position: 'bottom-right',
+          duration: 4000,
+          style: {
+            border: '1px solid black',
+            boxShadow: '10px 5px 5px black',
+          },
+        }
+      );
+
       if (!provider) {
         throw new Error('invalid chain RPC URL');
       }
       
       const response: string = await provider.evaluateExpression(
         Config.REALM_PATH,
-        `IsUserRegistered("${accountInfo.address}")`
+        `isUserRegistered("${accountInfo.address}")`
       );
       
       if (response.includes("false")) {
-        console.log("User not registered");
+        // console.log("User not registered");
         toast.error('User not registered',
           {
             position: 'bottom-right',
@@ -66,17 +77,6 @@ const Connect: FC<IConnectProps> = () => {
           }
         );
       }
-
-      toast.success('Successfully connected to Adena',
-        {
-          position: 'bottom-right',
-          duration: 4000,
-          style: {
-            border: '1px solid black',
-            boxShadow: '10px 5px 5px black',
-          },
-        }
-      );
     } catch (e) {
       console.error(e);
 
